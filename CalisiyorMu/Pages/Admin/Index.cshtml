@@ -1,0 +1,28 @@
+﻿@page
+@model CalisiyorMu.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "Admin";
+    Layout = "_Layout";
+}
+
+<h1>Admin</h1>
+
+@if (Model.Study.IsWorking)
+{
+    <h2>Çalışıyor</h2>
+
+    <form method="post">
+        <button type="submit" class="btn btn-danger">Çalışmayı Bitir.</button>
+    </form>
+
+}
+else
+{
+    <h2>Çalışmıyor.</h2>
+
+    <form method="post">
+        <button type="submit" class="btn btn-primary" asp-page-handler="Baslat">Çalışmayı Başlat.</button>
+    </form>
+}
+
+
