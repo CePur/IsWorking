@@ -51,6 +51,8 @@ namespace CalisiyorMu
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
