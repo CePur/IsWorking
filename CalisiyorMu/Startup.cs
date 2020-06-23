@@ -1,4 +1,5 @@
 using CalisiyorMu.Data;
+using CalisiyorMu.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,15 @@ namespace CalisiyorMu
 
             services.AddScoped<IStudyData, SqlStudyData>();
 
-            services.AddRazorPages();
+            services.AddSingleton<AdminRegistrationTokenService>();
+
+            services.AddAuthorization(options =>
+                options.AddPolicy("Admin", policy =>
+                    policy.RequireAuthenticatedUser()
+                            .RequireClaim("IsAdmin", bool.TrueString)));
+
+            services.AddRazorPages(options =>
+                options.Conventions.AuthorizeFolder("/Admin", "Admin"));
 
             services.AddControllers();
         }

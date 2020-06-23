@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using CalisiyorMu.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -45,6 +47,9 @@ namespace CalisiyorMu.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [DataType(DataType.Password)]
+            [Display(Name = "Admin enrollment key")]
+            public ulong? AdminEnrollmentKey { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 3)]
@@ -65,6 +70,8 @@ namespace CalisiyorMu.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+
+
             public string ConfirmPassword { get; set; }
         }
 
@@ -74,7 +81,7 @@ namespace CalisiyorMu.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync([FromServices] AdminRegistrationTokenService tokenService, string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -85,6 +92,9 @@ namespace CalisiyorMu.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // IsAdmin true if keys matches
+                    await _userManager.AddClaimAsync(user,new Claim("IsAdmin", (Input.AdminEnrollmentKey == tokenService.CreationKey).ToString()));
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

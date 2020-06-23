@@ -1,14 +1,18 @@
 ﻿using CalisiyorMu.Data;
 using CalisiyorMu.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 
 namespace CalisiyorMu.Pages.Admin
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IStudyData studyData;
+
+        public bool IsAdmin => HttpContext.User.HasClaim("IsAdmin", bool.TrueString);
 
         [BindProperty]
         public Study Study { get; set; }
