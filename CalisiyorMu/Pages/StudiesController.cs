@@ -1,7 +1,10 @@
 ﻿using CalisiyorMu.Data;
+using CalisiyorMu.Hubs;
 using CalisiyorMu.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Threading.Tasks;
 
 namespace CalisiyorMu.Pages
 {
@@ -10,21 +13,23 @@ namespace CalisiyorMu.Pages
     public class StudiesController : ControllerBase
     {
         private readonly IStudyData studyData;
+        private readonly IHubContext<WorkHub> workHub;
 
         [BindProperty]
         public Study Study { get; set; }
 
-        public StudiesController(IStudyData studyData)
+        public StudiesController(IStudyData studyData, IHubContext<WorkHub> workHub)
         {
             this.studyData = studyData;
+            this.workHub = workHub;
         }
+
 
 
         // GET: api/Studies
         [HttpGet]
         public Study Get()
         {
-
             Study = studyData.GetLast();
 
             if (Study == null)
@@ -34,22 +39,14 @@ namespace CalisiyorMu.Pages
             }
 
             return Study;
-
-
         }
 
-        //// GET: api/Studies/5
-        //[HttpGet("{id}", Name = "Get")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
+      
 
         //START
         // POST: api/Studies/start
         [HttpPost("{value}")]
-        public void Post(string value)
+        public async void Post(string value)
         {
             if (value == "start")
             {
@@ -62,26 +59,29 @@ namespace CalisiyorMu.Pages
                     studyData.Update(Study);
                 }
                 studyData.Create();
+                await ChangeStatus();
             }
         }
+
         //STOP
         // PUT: api/Studies/stop
         [HttpPut("{value}")]
-        public void Put(string value)
+        public async void Put(string value)
         {
             Study = studyData.GetLast();
             if (value == "stop" && Study.IsWorking == true)
             {
                 Study.IsWorking = false;
+                await ChangeStatus();
                 Study.EndTime = DateTimeOffset.UtcNow;
                 studyData.Update(Study);
             }
         }
 
-        // DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        public async Task ChangeStatus()
+        {
+            await workHub.Clients.All.SendAsync("ReceiveMessage");
+        }
+
     }
 }

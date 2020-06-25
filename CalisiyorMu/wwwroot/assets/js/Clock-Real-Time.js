@@ -15,11 +15,11 @@ function showtime() {
     document.getElementById('time').innerHTML = hrs + ':' + mins + ':' + secs;
 }
 
-setTimeout(reload, 60000);
+//setTimeout(reload, 60000);
 
-function reload() {
-    window.location.href = window.location.href;
-}
+//function reload() {
+//    window.location.href = window.location.href;
+//}
 
 
 
