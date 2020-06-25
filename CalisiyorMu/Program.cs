@@ -16,6 +16,8 @@ namespace CalisiyorMu
             {
                 var db = scope.ServiceProvider.GetService<CalisiyorMuDbContext>();
                 db.Database.Migrate();
+                var db2 = scope.ServiceProvider.GetService<AuthContext>();
+                db2.Database.Migrate();
             }
 
             host.Run();

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using CalisiyorMu.Hubs;
 
 namespace CalisiyorMu
 {
@@ -38,6 +39,9 @@ namespace CalisiyorMu
                 options.Conventions.AuthorizeFolder("/Admin", "Admin"));
 
             services.AddControllers();
+
+            services.AddHttpContextAccessor();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,10 +68,13 @@ namespace CalisiyorMu
 
             app.UseAuthorization();
 
+           
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
+                endpoints.MapHub<WorkHub>("/workhub");
             });
 
         }

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using CalisiyorMu.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
 namespace CalisiyorMu.Pages.Admin
 {
@@ -11,15 +14,17 @@ namespace CalisiyorMu.Pages.Admin
     public class IndexModel : PageModel
     {
         private readonly IStudyData studyData;
+        private readonly IHubContext<WorkHub> workHub;
 
         public bool IsAdmin => HttpContext.User.HasClaim("IsAdmin", bool.TrueString);
 
         [BindProperty]
         public Study Study { get; set; }
 
-        public IndexModel(IStudyData studyData)
+        public IndexModel(IStudyData studyData,IHubContext<WorkHub> workHub)
         {
             this.studyData = studyData;
+            this.workHub = workHub;
         }
 
         public IActionResult OnGet()
@@ -36,20 +41,29 @@ namespace CalisiyorMu.Pages.Admin
             return Page();
         }
 
-        public IActionResult OnPost()
+        //Stop
+        public async Task<IActionResult> OnPostAsync()
         {
             Study = studyData.GetLast();
             Study.IsWorking = false;
             Study.EndTime = DateTimeOffset.UtcNow;
             studyData.Update(Study);
+            await ChangeStatus();
 
             return RedirectToPage("../Index");
         }
 
-        public IActionResult OnPostBaslat()
+        //Start
+        public async Task<IActionResult> OnPostBaslatAsync()
         {
             studyData.Create();
+            await ChangeStatus();
             return RedirectToPage("../Index");
+        }
+
+        public async Task ChangeStatus()
+        {
+            await workHub.Clients.All.SendAsync("ReceiveMessage");            
         }
 
     }
