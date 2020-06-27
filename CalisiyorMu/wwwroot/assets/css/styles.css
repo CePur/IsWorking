@@ -5,3 +5,30 @@ main {
 #clickableAwesomeFont {
     cursor: pointer;
 }
+
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 15px #331700;
+    }
+
+    62% {
+        box-shadow: 0 0 23px #753c07;
+    }
+
+    100% {
+        box-shadow: 0 0 15px #331700;
+    }
+}
+
+.glow {
+    background-color: black;
+    border-radius: 5%;
+    padding: 30px 20px 10px 20px;
+    margin-bottom: 15px;
+    animation: glowing 12000ms infinite;
+}
+
+.text-info {
+    color: #5c5f2f !important;
+    text-shadow: 0 0 1px #524d2e;
+}

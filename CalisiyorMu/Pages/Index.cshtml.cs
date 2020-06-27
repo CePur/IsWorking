@@ -17,6 +17,7 @@ namespace CalisiyorMu.Pages
         public int ElapsedMinutes { get; set; }
         public int ElapsedHours { get; set; }
         public int Pomodoro { get; set; }
+        public string WeekAvg { get; set; }
         public string EndTimeTurkeyStr { get; set; }
         public DateTimeOffset StartTimeTurkey { get; set; }
 
@@ -40,6 +41,8 @@ namespace CalisiyorMu.Pages
                 OnPost();
             }
 
+            var weekAvg = studyData.WeekAvarage();
+            WeekAvg = weekAvg.ToString(weekAvg % 1 == 0 ? "F0" : "F2");
             Pomodoro = studyData.PomodoroCount();
             ElapsedHours = elapsedTime.Hours;
             ElapsedMinutes = elapsedTime.Minutes;

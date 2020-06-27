@@ -7,7 +7,7 @@ namespace CalisiyorMu.Data
 {
     public class InMemoryStudyData : IStudyData
     {
-        private List<Study> studies;
+        private readonly List<Study> studies;
 
         public InMemoryStudyData()
         {
@@ -69,6 +69,11 @@ namespace CalisiyorMu.Data
         }
 
         public int PomodoroCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public double WeekAvarage()
         {
             throw new NotImplementedException();
         }

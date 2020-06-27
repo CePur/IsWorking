@@ -12,6 +12,7 @@ namespace CalisiyorMu.Data
         void DeleteAll();
         int Commit();
         int PomodoroCount();
+        double WeekAvarage();
 
     }
 }

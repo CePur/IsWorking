@@ -65,5 +65,11 @@ namespace CalisiyorMu.Data
             dbContext.SaveChanges();
 
         }
+
+        public double WeekAvarage()
+        {
+            var sevenDayAgo = DateTimeOffset.UtcNow.Add(-TimeSpan.FromDays(7));
+            return dbContext.Studies.Where(s => s.StartTime.Date >= sevenDayAgo).Count() / 7.0;
+        }
     }
 }
