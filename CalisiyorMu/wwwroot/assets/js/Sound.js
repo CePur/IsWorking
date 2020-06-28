@@ -42,6 +42,7 @@ window.onload = function () {
         else {
             isSoundOn = true;
             soundOn(isSoundOn);
+            NotifyPermisson();
         }
     });
 
@@ -56,4 +57,35 @@ function soundOn(bool) {
     }
 
     populateStorage(bool);
+}
+
+
+
+function NotifyPermisson() {
+    if (("Notification" in window)) {
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission()
+        }
+    }
+}
+
+
+
+function showNotify(){
+    if (Notification.permission === "granted") {
+
+        var NotifyOptions = {
+            body: 'Müsait',
+            silent: false
+        }
+
+        var notification = new Notification("Çalışıyor Mu ?", NotifyOptions);
+
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') {
+                // The tab has become visible so clear the now-stale Notification.                                                                                                                                      
+                notification.close();
+            }
+        });
+    }
 }
