@@ -36,7 +36,7 @@
             </div>
             <div style="margin-top: 13px;padding: 0px;padding-bottom: 40px;">
                 <p class="d-flex d-xl-flex align-items-center align-items-xl-center" style="margin: 0px;">
-                    <span class="text-info" style="font-family: 'Roboto Condensed', sans-serif;font-size: 4vw;">Geçen Süre:&nbsp;</span><span style="font-size: 5vw;color: rgb(255, 149, 0);">@Model.ElapsedHours Saat</span><span style="font-size: 7vw;color: rgb(255, 149, 0);">@Model.ElapsedMinutes DK</span>
+                    <span class="text-info" style="font-family: 'Roboto Condensed', sans-serif;font-size: 4vw;">Geçen Süre:&nbsp;</span><span id="elapsedHour" style="font-size: 5vw;color: rgb(255, 149, 0);">@Model.ElapsedHours Saat</span><span id="elapsedMin" style="font-size: 7vw;color: rgb(255, 149, 0);">@Model.ElapsedMinutes DK</span>
                     @if (Model.ElapsedMinutes > 40)
                     {<span class="pulse animated infinite" style="display:inline-block;font-size: 60%;color: rgb(147, 215, 0);">Uzatmalarda..</span>}
                 </p>
