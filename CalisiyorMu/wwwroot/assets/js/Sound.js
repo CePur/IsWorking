@@ -10,82 +10,77 @@ const beep = (freq = 520, duration = 200, vol = 100) => {
     gain.gain.value = vol * 0.01;
     oscillator.start(context.currentTime);
     oscillator.stop(context.currentTime + duration * 0.001);
-}
+};
 
 
 var isSoundOn = false;
 
-if (!localStorage.getItem('isSoundOn')) {
+if (!localStorage.getItem("isSoundOn")) {
     populateStorage(isSoundOn);
 }
 
-isSoundOn = ((localStorage.getItem('isSoundOn')) == 'true');
+isSoundOn = ((localStorage.getItem("isSoundOn")) === "true");
 
 function populateStorage(isSoundOn) {
-    localStorage.setItem('isSoundOn', isSoundOn);
+    localStorage.setItem("isSoundOn", isSoundOn);
 
 }
 
 
-window.onload = function () {
+window.onload = function() {
 
     this.soundOn(isSoundOn);
 
-    $('#clickableAwesomeFont').click(function () {
-
-        var $this = $(this);
+    $("#clickableAwesomeFont").click(function() {
 
         if (isSoundOn) {
             isSoundOn = false;
             soundOn(isSoundOn);
-        }
-        else {
+        } else {
             isSoundOn = true;
             soundOn(isSoundOn);
             NotifyPermisson();
         }
     });
 
-}
+};
 
 function soundOn(bool) {
     if (bool) {
-        $('#clickableAwesomeFont').html('<i class="fas fa-volume-up fa-2x" style="color: rgb(165, 137, 26);"></i>');
-    }
-    else {
-        $('#clickableAwesomeFont').html('<i class="fas fa-volume-mute fa-2x"></i>');
+        $("#clickableAwesomeFont").html('<i class="fas fa-volume-up fa-2x" style="color: rgb(165, 137, 26);"></i>');
+    } else {
+        $("#clickableAwesomeFont").html('<i class="fas fa-volume-mute fa-2x"></i>');
     }
 
     populateStorage(bool);
 }
 
 
-
 function NotifyPermisson() {
     if (("Notification" in window)) {
         if (Notification.permission !== "granted") {
-            Notification.requestPermission()
+            Notification.requestPermission();
         }
     }
 }
 
 
-
-function showNotify(){
+function showNotify() {
     if (Notification.permission === "granted") {
 
-        var NotifyOptions = {
-            body: 'Müsait',
+        var notifyOptions = {
+            body: "Müsait",
             silent: false
-        }
+        };
 
-        var notification = new Notification("Çalışıyor Mu ?", NotifyOptions);
+        var notification = new Notification("Çalışıyor Mu ?", notifyOptions);
 
-        document.addEventListener('visibilitychange', function () {
-            if (document.visibilityState === 'visible') {
-                // The tab has become visible so clear the now-stale Notification.                                                                                                                                      
-                notification.close();
-            }
-        });
+        document.addEventListener("visibilitychange",
+            function() {
+                if (document.visibilityState === "visible") {
+                    // The tab has become visible so clear the now-stale Notification.                                                                                                                                      
+                    notification.close();
+                }
+            });
     }
 }

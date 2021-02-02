@@ -1,14 +1,13 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using CalisiyorMu.Areas.Identity
-
+﻿@using CalisiyorMu.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        AppUser user = await UserManager.GetUserAsync(User);
-        
+        var user = await UserManager.GetUserAsync(User);
+
 
         <li class="nav-item">
             <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @user.NickName!</a>

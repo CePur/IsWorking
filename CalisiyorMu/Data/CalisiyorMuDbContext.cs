@@ -7,8 +7,8 @@ namespace CalisiyorMu.Data
     {
         public CalisiyorMuDbContext(DbContextOptions<CalisiyorMuDbContext> options) : base(options)
         {
-
         }
+
 
 
         public DbSet<Study> Studies { get; set; }

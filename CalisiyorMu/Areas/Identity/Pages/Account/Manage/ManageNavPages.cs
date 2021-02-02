@@ -1,28 +1,50 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CalisiyorMu.Areas.Identity.Pages.Account.Manage
 {
     public static class ManageNavPages
     {
-        public static string Index => "Index";
+        public static string Index
+        {
+            get { return "Index"; }
+        }
 
-        public static string Email => "Email";
+        public static string Email
+        {
+            get { return "Email"; }
+        }
 
-        public static string ChangePassword => "ChangePassword";
+        public static string ChangePassword
+        {
+            get { return "ChangePassword"; }
+        }
 
-        public static string DownloadPersonalData => "DownloadPersonalData";
+        public static string DownloadPersonalData
+        {
+            get { return "DownloadPersonalData"; }
+        }
 
-        public static string DeletePersonalData => "DeletePersonalData";
+        public static string DeletePersonalData
+        {
+            get { return "DeletePersonalData"; }
+        }
 
-        public static string ExternalLogins => "ExternalLogins";
+        public static string ExternalLogins
+        {
+            get { return "ExternalLogins"; }
+        }
 
-        public static string PersonalData => "PersonalData";
+        public static string PersonalData
+        {
+            get { return "PersonalData"; }
+        }
 
-        public static string TwoFactorAuthentication => "TwoFactorAuthentication";
+        public static string TwoFactorAuthentication
+        {
+            get { return "TwoFactorAuthentication"; }
+        }
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
@@ -40,10 +62,13 @@ namespace CalisiyorMu.Areas.Identity.Pages.Account.Manage
 
         public static string TwoFactorAuthenticationNavClass(ViewContext viewContext) => PageNavClass(viewContext, TwoFactorAuthentication);
 
+
+
         private static string PageNavClass(ViewContext viewContext, string page)
         {
-            var activePage = viewContext.ViewData["ActivePage"] as string
-                ?? System.IO.Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
+            string activePage = viewContext.ViewData["ActivePage"] as string
+                                ?? Path.GetFileNameWithoutExtension(viewContext.ActionDescriptor.DisplayName);
+
             return string.Equals(activePage, page, StringComparison.OrdinalIgnoreCase) ? "active" : null;
         }
     }

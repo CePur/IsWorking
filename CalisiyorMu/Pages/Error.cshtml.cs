@@ -1,7 +1,7 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 
 namespace CalisiyorMu.Pages
 {
@@ -10,14 +10,21 @@ namespace CalisiyorMu.Pages
     {
         public string RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public bool ShowRequestId
+        {
+            get { return !string.IsNullOrEmpty(RequestId); }
+        }
 
-        private readonly ILogger<ErrorModel> _logger;
+        private readonly ILogger<ErrorModel> logger;
+
+
 
         public ErrorModel(ILogger<ErrorModel> logger)
         {
-            _logger = logger;
+            this.logger = logger;
         }
+
+
 
         public void OnGet()
         {

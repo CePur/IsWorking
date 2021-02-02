@@ -1,12 +1,12 @@
-﻿using CalisiyorMu.Data;
+﻿using System;
+using System.Threading.Tasks;
+using CalisiyorMu.Data;
+using CalisiyorMu.Hubs;
 using CalisiyorMu.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using CalisiyorMu.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 
 namespace CalisiyorMu.Pages.Admin
 {
@@ -16,16 +16,23 @@ namespace CalisiyorMu.Pages.Admin
         private readonly IStudyData studyData;
         private readonly IHubContext<WorkHub> workHub;
 
-        public bool IsAdmin => HttpContext.User.HasClaim("IsAdmin", bool.TrueString);
+        public bool IsAdmin
+        {
+            get { return HttpContext.User.HasClaim("IsAdmin", bool.TrueString); }
+        }
 
         [BindProperty]
         public Study Study { get; set; }
 
-        public IndexModel(IStudyData studyData,IHubContext<WorkHub> workHub)
+
+
+        public IndexModel(IStudyData studyData, IHubContext<WorkHub> workHub)
         {
             this.studyData = studyData;
             this.workHub = workHub;
         }
+
+
 
         public IActionResult OnGet()
         {
@@ -41,6 +48,8 @@ namespace CalisiyorMu.Pages.Admin
             return Page();
         }
 
+
+
         //Stop
         public async Task<IActionResult> OnPostAsync()
         {
@@ -53,18 +62,22 @@ namespace CalisiyorMu.Pages.Admin
             return RedirectToPage("../Index");
         }
 
+
+
         //Start
         public async Task<IActionResult> OnPostBaslatAsync()
         {
             studyData.Create();
             await ChangeStatus();
+
             return RedirectToPage("../Index");
         }
 
+
+
         public async Task ChangeStatus()
         {
-            await workHub.Clients.All.SendAsync("ReceiveMessage");            
+            await workHub.Clients.All.SendAsync("ReceiveMessage");
         }
-
     }
 }

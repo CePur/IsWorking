@@ -1,27 +1,18 @@
-main {
-    text-shadow: 0 0 3px #FF0000;
-}
+main { text-shadow: 0 0 3px #FF0000; }
 
-#clickableAwesomeFont {
-    cursor: pointer;
-}
+#clickableAwesomeFont { cursor: pointer; }
 
 @keyframes glowing {
-    0% {
-        box-shadow: 0 0 15px #331700;
-    }
+    0% { box-shadow: 0 0 15px #331700; }
 
-    62% {
-        box-shadow: 0 0 23px #753c07;
-    }
+    62% { box-shadow: 0 0 23px #753c07; }
 
-    100% {
-        box-shadow: 0 0 15px #331700;
-    }
+    100% { box-shadow: 0 0 15px #331700; }
 }
 
 .glow {
     background-color: black;
+    -ms-border-radius: 5%;
     border-radius: 5%;
     padding: 30px 20px 10px 20px;
     margin-bottom: 15px;

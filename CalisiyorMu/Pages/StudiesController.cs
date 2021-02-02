@@ -1,10 +1,10 @@
-﻿using CalisiyorMu.Data;
+﻿using System;
+using System.Threading.Tasks;
+using CalisiyorMu.Data;
 using CalisiyorMu.Hubs;
 using CalisiyorMu.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading.Tasks;
 
 namespace CalisiyorMu.Pages
 {
@@ -17,6 +17,8 @@ namespace CalisiyorMu.Pages
 
         [BindProperty]
         public Study Study { get; set; }
+
+
 
         public StudiesController(IStudyData studyData, IHubContext<WorkHub> workHub)
         {
@@ -41,7 +43,7 @@ namespace CalisiyorMu.Pages
             return Study;
         }
 
-      
+
 
         //START
         // POST: api/Studies/start
@@ -50,18 +52,21 @@ namespace CalisiyorMu.Pages
         {
             if (value == "start")
             {
-
                 Study = studyData.GetLast();
-                if (Study.IsWorking == true)
+
+                if (Study.IsWorking)
                 {
                     Study.IsWorking = false;
                     Study.EndTime = DateTimeOffset.UtcNow;
                     studyData.Update(Study);
                 }
+
                 studyData.Create();
                 await ChangeStatus();
             }
         }
+
+
 
         //STOP
         // PUT: api/Studies/stop
@@ -69,7 +74,8 @@ namespace CalisiyorMu.Pages
         public async void Put(string value)
         {
             Study = studyData.GetLast();
-            if (value == "stop" && Study.IsWorking == true)
+
+            if (value == "stop" && Study.IsWorking)
             {
                 Study.IsWorking = false;
                 await ChangeStatus();
@@ -78,10 +84,11 @@ namespace CalisiyorMu.Pages
             }
         }
 
+
+
         public async Task ChangeStatus()
         {
             await workHub.Clients.All.SendAsync("ReceiveMessage");
         }
-
     }
 }

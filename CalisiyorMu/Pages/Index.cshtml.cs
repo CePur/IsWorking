@@ -1,16 +1,16 @@
-﻿using CalisiyorMu.Data;
+﻿using System;
+using System.Globalization;
+using CalisiyorMu.Data;
 using CalisiyorMu.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Globalization;
 
 namespace CalisiyorMu.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<IndexModel> logger;
         private readonly IStudyData studyData;
 
         public Study Study { get; set; }
@@ -21,45 +21,49 @@ namespace CalisiyorMu.Pages
         public string EndTimeTurkeyStr { get; set; }
         public DateTimeOffset StartTimeTurkey { get; set; }
 
+
+
         public IndexModel(ILogger<IndexModel> logger, IStudyData studyData)
         {
-            _logger = logger;
+            this.logger = logger;
             this.studyData = studyData;
         }
+
+
 
         public IActionResult OnGet()
         {
             Study = studyData.GetLast();
 
-            if (Study == null) { return RedirectToPage("./Admin/Index"); }
+            if (Study == null) return RedirectToPage("./Admin/Index");
 
 
             var elapsedTime = DateTimeOffset.UtcNow - Study.StartTime;
 
-            if (Study.IsWorking == true && elapsedTime > new TimeSpan(1, 0, 0))
+            if (Study.IsWorking && elapsedTime > new TimeSpan(1, 0, 0))
             {
                 OnPost();
             }
 
-            var weekAvg = studyData.WeekAvarage();
+            double weekAvg = studyData.WeekAvarage();
             WeekAvg = weekAvg.ToString(weekAvg % 1 == 0 ? "F0" : "F2");
             Pomodoro = studyData.PomodoroCount();
             ElapsedHours = elapsedTime.Hours;
             ElapsedMinutes = elapsedTime.Minutes;
 
 
-            TimeZoneInfo tst;
+            var tst = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
 
-            tst = TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
+            var endTimeTurkey = TimeZoneInfo.ConvertTime(Study.EndTime, tst);
 
-            DateTimeOffset EndTimeTurkey = TimeZoneInfo.ConvertTime(Study.EndTime, tst);
-
-            EndTimeTurkeyStr = EndTimeTurkey.DateTime.ToString(new CultureInfo("tr-TR"));
+            EndTimeTurkeyStr = endTimeTurkey.DateTime.ToString(new CultureInfo("tr-TR"));
 
             StartTimeTurkey = TimeZoneInfo.ConvertTime(Study.StartTime, tst);
 
             return Page();
         }
+
+
 
         // çalışmayı durdur
         public IActionResult OnPost()
