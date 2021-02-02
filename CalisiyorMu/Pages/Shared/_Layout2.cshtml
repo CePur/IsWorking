@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed">
     <link rel="stylesheet" href="assets/css/VPS%20Son%20La%20Hoa.css">
     <link rel="stylesheet" href="assets/css/Clock-Real-Time.css">
@@ -17,13 +17,13 @@
 
 <body class="text-warning d-flex justify-content-center align-items-center" style="background-color: rgb(8, 8, 8); font-family: 'VPS Son La Hoa'; height: 100vh;">
 
-@RenderBody()
+    @RenderBody()
 
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/RemoveAds.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/RemoveAds.js"></script>
 
-@await RenderSectionAsync("Scripts", false)
+    @await RenderSectionAsync("Scripts", false)
 </body>
 </html>
